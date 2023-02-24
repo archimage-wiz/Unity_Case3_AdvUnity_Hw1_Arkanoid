@@ -5,8 +5,8 @@ public class BrickBody : MonoBehaviour
 {
 
 
-    void OnStart(){
-        Debug.Log("brick body");
+    void Start(){
+        //Debug.Log("brick body");
     }
 
 }

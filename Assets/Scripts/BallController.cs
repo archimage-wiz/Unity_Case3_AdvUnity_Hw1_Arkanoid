@@ -14,12 +14,12 @@ public class BallController : MonoBehaviour
     private Vector3 _av_before_collision;
     private PlayerController _last_player;
 
-    void Start() {
+    void OnEnable() {
 
         _self_rigidbody = transform.GetComponent<Rigidbody>();
 
-        //_last_vector = new Vector3(Random.Range(-1, 1), 0, Random.Range(-1, 1)) * _ball_speed;
-        _last_vector = new Vector3(15, 5, 5) * _ball_speed;
+        _last_vector = new Vector3(Random.Range(-1, 1), 0, Random.Range(-1, 1)) * _ball_speed;
+        //_last_vector = new Vector3(15, 5, 5) * _ball_speed;
         _self_rigidbody.velocity = _last_vector;
 
     }
@@ -32,19 +32,17 @@ public class BallController : MonoBehaviour
         if (collision.gameObject == FindObjectOfType<Player1Bat>().gameObject){
             _last_player = FindObjectOfType<Player1Controller>();
             _was_a_payer = true;
-            //Debug.Log("p1 Ball");
         }
         if (collision.gameObject == FindObjectOfType<Player2Bat>().gameObject){
             _last_player = FindObjectOfType<Player2Controller>();
             _was_a_payer = true;
-            //Debug.Log("p2 Ball");
         }
         if(_was_a_payer) {
             var p_vel = _last_player.GetVector2Velocity();
             _last_vector += new Vector3(0, p_vel.y, p_vel.x) * _ball_distraction_factor;
         }
 
-        if (collision.gameObject.ToString().Contains("Brick") && _last_player) {
+        if (collision.gameObject.GetComponent<BrickController>() is BrickController && _last_player) {
             int x = collision.gameObject.GetComponent<BrickController>().GetSelfPower();
             _last_player.AddScore(x);
         }
@@ -62,7 +60,6 @@ public class BallController : MonoBehaviour
         if (_last_vector.x > 0 && _last_vector.x < 5) { _last_vector += new Vector3(0.1f, 0, 0) * Time.deltaTime; }
         if (_last_vector.x < 0 && _last_vector.x > -5) { _last_vector -= new Vector3(0.1f, 0, 0) * Time.deltaTime; }
         _self_rigidbody.velocity = _last_vector;
-        //Debug.Log(_last_vector);
 
         if (transform.position.x > _level_bound_p1){
             print("Player 1 Lose. Game over.");
